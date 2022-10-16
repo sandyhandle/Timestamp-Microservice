@@ -31,7 +31,7 @@ app.get("/api/:word", function(req,res) {
   let dateStr = req.params.word;
 
 
-  if (!dateStr.match(/-/g)) {
+  if (!dateStr.match(/\d{5,}/)) {
     dateStr = +dateStr;
   }
   let date = new Date(dateStr);
@@ -48,7 +48,7 @@ app.get("/api/:word", function(req,res) {
     })
 });
 
-app.get("/api/",function(req,res) {
+app.get("/api",function(req,res) {
   const date = new Date()
   console.log(date.valueOf(), date.toGMTString());
   res.json({
