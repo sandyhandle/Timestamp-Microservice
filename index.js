@@ -44,16 +44,16 @@ app.get("/api/:word", function(req,res) {
   console.log(date.toDateString(), date.valueOf()); // 👉️ Wed Jun 22 2022
   res.json({
       unix : date.valueOf(),
-      utc: date.toGMTString()
+      utc: date.toUTCString()
     })
 });
 
 app.get("/api",function(req,res) {
   const date = new Date()
-  console.log(date.valueOf(), date.toGMTString());
+  console.log(date.valueOf(), date.toUTCString());
   res.json({
     unix: date.valueOf(),
-    utc: date.toGMTString()
+    utc: date.toUTCString()
   })
 })
 
