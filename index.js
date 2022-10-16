@@ -28,21 +28,39 @@ app.get("/api/hello", function (req, res) {
 
 // api get the api
 app.get("/api/:word", function(req,res) {
-  const dateStr = req.params.word;
+  let dateStr = req.params.word;
 
-  const date = new Date(dateStr);
+
+  if (!dateStr.match(/-/g)) {
+    dateStr = +dateStr;
+  }
+  let date = new Date(dateStr);
+  console.log(date)
+  if (date.toUTCString() === "Invalid Date"){
+    res.json({
+      error: date.toUTCString()
+    })
+  }
   console.log(date.toDateString(), date.valueOf()); // 👉️ Wed Jun 22 2022
-  
   res.json({
       unix : date.valueOf(),
       utc: date.toGMTString()
     })
 });
 
+app.get("/api/",function(req,res) {
+  const date = new Date()
+  console.log(date.valueOf(), date.toGMTString());
+  res.json({
+    unix: date.valueOf(),
+    utc: date.toGMTString()
+  })
+})
+
 
 
 // listen for requests :)
-const listener = app.listen(process.env.PORT || 3001, function () {
+const listener = app.listen(process.env.PORT || 3000, function () {
   console.log("Node.js listening on port " + listener.address().port);
 });
 
