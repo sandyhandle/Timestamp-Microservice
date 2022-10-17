@@ -28,24 +28,35 @@ app.get("/api/hello", function (req, res) {
 
 // api get the api
 app.get("/api/:word", function(req,res) {
-  let dateStr = req.params.word;
+  let dateString = req.params.word;
 
+  //A 4 digit number is a valid ISO-8601 for the beginning of that year
 
-  if (!dateStr.match(/-/g)) {
-    dateStr = +dateStr;
+  //5 digits or more must be a unix time, until we reach a year 10,000 problem
+
+  if (/\d{5,}/.test(dateString)) {
+
+    const dateInt = parseInt(dateString);
+
+    //Date regards numbers as unix timestamps, strings are processed differently
+
+    res.json({ unix: dateInt, utc: new Date(dateInt).toUTCString() });
+
+  } else {
+
+    let dateObject = new Date(dateString);
+
+    if (dateObject.toString() === "Invalid Date") {
+
+      res.json({ error: "Invalid Date" });
+
+    } else {
+
+      res.json({ unix: dateObject.valueOf(), utc: dateObject.toUTCString() });
+
+    }
+
   }
-  let date = new Date(dateStr);
-  console.log(date)
-  if (date.toUTCString() === "Invalid Date"){
-    res.json({
-      error: date.toUTCString()
-    })
-  }
-  console.log(date.toDateString(), date.valueOf()); // 👉️ Wed Jun 22 2022
-  res.json({
-      unix : date.valueOf(),
-      utc: date.toUTCString()
-    })
 });
 
 app.get("/api",function(req,res) {
